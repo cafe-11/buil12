@@ -53,7 +53,17 @@ pipeline {
                 deploy adapters: [tomcat9(credentialsId: 'tomcat_login_info', path: '', url: 'http://172.31.23.129:8080/')], contextPath: 'prod-java-tomcat-pipeline-sample', war: '**/*.war'
             }
         }
+           stage('DeployToDevAndQa') {
+            when {
+                environment name: 'SDLC_ENV', value: 'dev_qa'
+            }
+            steps {
+                deploy adapters: [tomcat9(credentialsId: 'tomcat_creds', path: '', url: 'http://172.31.51.217:8080/')], contextPath: 'dev-java-tomcat-pipeline-sample', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat_creds', path: '', url: 'http:/172.31.48.232:8080/')], contextPath: 'qa-java-tomcat-pipeline-sample', war: '**/*.war'
+            }
+        }
     }
+    
     post {
         always {
             archiveArtifacts artifacts: '**/*.war', fingerprint: true
