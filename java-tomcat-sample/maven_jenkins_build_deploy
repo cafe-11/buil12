@@ -4,13 +4,13 @@ pipeline {
         maven 'Maven_Local'
     }
     parameters {
-        string(name: 'SDLC_ENV', defualtValue: '', description: 'Enter SDLC Enviroment')
+        string(name: 'SDLC_ENV', defaultValue: '', description: 'Enter SDLC Environment')
     }
     stages {
         stage('Build') {
             steps {
                 echo 'Building..'
-                echo "Running ${env.BUILD_ID} on ${env.JRNKINS_URL}"
+                echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
                 dir("${env.WORKSPACE}/java-tomcat-sample"){
                     sh "pwd"
                     sh 'mvn clean install -f pom.xml'
@@ -20,31 +20,31 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing..'
-                echo "${params.SDLC_ENV} is value retrived!"
+                echo "${params.SDLC_ENV} is value retrieved!"
             }
         }
         stage('DeployToDev') {
             when {
-                enviroment name: 'SDLC_ENV', value: 'dev'
+                environment name: 'SDLC_ENV', value: 'dev'
             }
             steps {
-                deploy adapters: [tomcat9(credentialsID: 'tomcat_creds', path: '', url: 'http://172.31.30.81:8080/')], contextPath: 'dev-java-tomcat-pipeline-sample', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat_creds', path: '', url: 'http://172.31.30.81:8080/')], contextPath: 'dev-java-tomcat-pipeline-sample', war: '**/*.war'
             }
         }
         stage('DeployToQa') {
             when {
-                enviroment name: 'SDLC_ENV', value: 'qa'
+                environment name: 'SDLC_ENV', value: 'qa'
             }
             steps {
-                deploy adapters: [tomcat9(credentialsID: 'tomcat_login_info', path: '', url: 'http://172.31.1.52:8080/')], contextPath: 'qa-java-tomcat-pipeline-sample', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat_login_info', path: '', url: 'http://172.31.1.52:8080/')], contextPath: 'qa-java-tomcat-pipeline-sample', war: '**/*.war'
             }
         }
         stage('DeployToProd') {
             when {
-                enviroment name: 'SDLC_ENV', value: 'prod'
+                environment name: 'SDLC_ENV', value: 'prod'
             }
             steps {
-                deploy adapters: [tomcat9(credentialsID: 'tomcat_login_info', path: '', url: 'http://172.31.1.52:8080/')], contextPath: 'prod-java-tomcat-pipeline-sample', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat_login_info', path: '', url: 'http://172.31.1.52:8080/')], contextPath: 'prod-java-tomcat-pipeline-sample', war: '**/*.war'
             }
         }
     }
