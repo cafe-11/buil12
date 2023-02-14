@@ -7,7 +7,7 @@ pipeline {
         string(name: 'SDLC_ENV', defualtValue: '', description: 'Enter SDLC Enviroment')
     }
     stages {
-        stage('Build) {
+        stage('Build') {
             steps {
                 echo 'Building..'
                 echo "Running ${env.BUILD_ID} on ${env.JRNKINS_URL}"
@@ -35,7 +35,7 @@ pipeline {
                 enviroment name: 'SDLC_ENV', value: 'qa'
             }
             steps {
-                deploy adapters: [tomcat9(credentialsId: 'tomcat_login_info', path: '', url: 'http://172.31.1.52:8080/')], contextPath: 'qa-java-tomcat-pipeline-sample', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsID: 'tomcat_login_info', path: '', url: 'http://172.31.1.52:8080/')], contextPath: 'qa-java-tomcat-pipeline-sample', war: '**/*.war'
             }
         }
         satge('DeployToProd') {
