@@ -14,7 +14,8 @@ pipeline {
                 dir("${env.WORKSPACE}/java-tomcat-sample")
                     sh "pwd"
                     sh 'mvn clean install -f pom.xml'
-            }
+                }
+            }            
         }
         stage('Test') {
             steps {
@@ -27,7 +28,7 @@ pipeline {
                 enviroment name: 'SDLC_ENV', value: 'dev'
             }
             steps {
-                deploy adaptors: [tomcat9(credentialsID: 'tomcat_creds', path: '', url: 'http://172.31.30.81:8080/')], contextpath: 'dev-java-tomcat-pipeline-sample', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsID: 'tomcat_creds', path: '', url: 'http://172.31.30.81:8080/')], contextPath: 'dev-java-tomcat-pipeline-sample', war: '**/*.war'
             }
         }
         stage('DeployToQa') {
@@ -38,12 +39,12 @@ pipeline {
                 deploy adapters: [tomcat9(credentialsID: 'tomcat_login_info', path: '', url: 'http://172.31.1.52:8080/')], contextPath: 'qa-java-tomcat-pipeline-sample', war: '**/*.war'
             }
         }
-        satge('DeployToProd') {
+        stage('DeployToProd') {
             when {
                 enviroment name: 'SDLC_ENV', value: 'prod'
             }
             steps {
-                deploy adaptors: [tomcat9(credentialsID: 'tomcat_login_info', path: '', url: 'http://172.31.1.52:8080/')], contexpath: 'prod-java-tomcat-pipeline-sample', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsID: 'tomcat_login_info', path: '', url: 'http://172.31.1.52:8080/')], contextPath: 'prod-java-tomcat-pipeline-sample', war: '**/*.war'
             }
         }
     }
