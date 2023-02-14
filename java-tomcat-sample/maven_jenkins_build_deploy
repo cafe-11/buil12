@@ -27,7 +27,7 @@ pipeline {
                 enviroment name: 'SDLC_ENV', value: 'dev'
             }
             steps {
-                deploy adaptors: [tomcat9(credentialsID: 'tomcat_login_info', path: '', url: 'http://172.31.1.52:8080/')], contextpath: 'dev-java-tomcat-pipeline-sample', war: '**/*.war'
+                deploy adaptors: [tomcat9(credentialsID: 'tomcat_creds', path: '', url: 'http://172.31.30.81:8080/')], contextpath: 'dev-java-tomcat-pipeline-sample', war: '**/*.war'
             }
         }
         stage('DeployToQa') {
