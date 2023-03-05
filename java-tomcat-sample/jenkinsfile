@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+	tools {
+	   maven 'Maven_New'
+	}
+	stages {
+	    stage('ContinuousDownload') {
+		    steps {
+			    git branch: 'main', credentialsId: 'git_creds', url: 'https://github.com/cafe-11/buil12.git'
+			}
+		}
+		stage('Build') {
+		    steps {
+			    sh 'mvn clean install -f java-tomcat-sample/pom.xml'
+			}
+		}
+		stage('DeployToDev') {
+		    steps {
+		         deploy adapters: [tomcat9(credentialsId: 'tomcat_creds', path: '', url: 'http://172.31.67.14:8080/')], contextPath: 'dev-java-tomcat-pipeline-sample', war: '**/*.war'
+		    }
+		}
+		stage('Approval') {
+		    steps {
+			    echo "Taking approval from DEV Manager for QA Deployment"
+                timeout(time: 7, unit: 'DAYS') {
+                input message: 'Do you want to deploy?', submitter: 'admin'
+                }
+			}
+		}
+		stage('DeployToQa') {
+            steps {
+                deploy adapters: [tomcat9(credentialsId: 'tomcat_creds', path: '', url: 'http://172.31.70.224:8080/')], contextPath: 'qa-java-tomcat-pipeline-sample', war: '**/*.war'
+            }
+        }
+	}
+}
