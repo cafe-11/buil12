@@ -1,0 +1,15 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo installing the maven...
+      - yum install -y maven
+  build:
+    commands:
+      - echo build completed 
+      - mvn clean install -f java-tomcat-sample/pom.xml
+      
+artifacts:
+  files:
+    - '**/*.war'
