@@ -5,10 +5,10 @@ files:
     destination: /opt/apache-tomcat-9.0.35/webapps/
 hooks:
   ApplicationStop:
-    - location: /scripts/serevr_stop.sh
+    - location: scripts/serevr_stop.sh
       timeout: 60
       runas: root
   ApplicationStart:
-    - location: /scripts/server_start.sh
+    - location: scripts/server_start.sh
       timeout: 60
       runas: root
