@@ -1,0 +1,14 @@
+version: 0.0
+os: linux
+files:
+  - source: /target/java-tomcat-maven-example.war 
+    destination: /opt/apache-tomcat-9.0.35/webapps/
+hooks:
+  ApplicationStop:
+    - location: /scripts/serevr_stop.sh
+      timeout: 60
+      runas: root
+  ApplicationStart:
+    - location: /scripts/server_start.sh
+      timeout: 60
+      runas: root
