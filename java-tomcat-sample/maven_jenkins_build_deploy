@@ -6,7 +6,6 @@ pipeline {
     parameters {
         string(name: 'SDLC_ENV', defaultValue: '', description: 'Enter SDLC Environment')
     }
-    }
     stages {
         stage('ContinuousDownload') {
 		    steps {
